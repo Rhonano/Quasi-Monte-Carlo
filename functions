@@ -309,10 +309,11 @@ QuasiAmerPutLSM_CV <- function (Spot = 1, sigma = 0.2, n = 25000, m = 365, Strik
   dCFL <- CFL[, m] * exp(-1 * r * mT)
   EUsimul <- mean(dCFL)
   EUBS <- EuPutBS(Spot, sigma, Strike, r, dr, mT)
+  SE <- sqrt(var(rowSums(dFPOF))/n)
   PRICE <- PRICE1 - (EUsimul - EUBS)
   res <- list(price = (PRICE), Spot, Strike, sigma, n, m, r, 
               dr, mT)
   class(res) <- "AmerPutCV"
-  return(PRICE)
+  return(c(var(rowSums(dFPOF)),var(rowSums(dFPOF) - (dCFL - EUBS))))
 }
 
